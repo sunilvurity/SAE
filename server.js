@@ -3,10 +3,10 @@ const Twitter = require('twit');
 
 const app = express();
 const client = new Twitter({
-  consumer_key: 'T60zqQWSkG6S5a1eWdNsH1c4V',
-  consumer_secret: '5hzj26rNWKS2xvzEfSH8Lj7t7FhELF5Z2nGoZ5EcZzRjidL8fM',
-  access_token: '144913307-m0untfOP5LTGJq8ZkVmmBhkGWTagrk4mclPDXTkX',
-  access_token_secret: '2tipIyqQa3TQivZgFVxPw8S5QCdiMoWwNbcRTNynCdgJgnode'
+  consumer_key: '',
+  consumer_secret: '',
+  access_token: '',
+  access_token_secret: ''
 });
 
 app.use(require('cors')());
@@ -21,6 +21,26 @@ app.get('/api/user', (req, res) => {
     .catch(error => {
       res.send(error);
     });
+});
+
+app.get('/api/usertweets', (req, res) => {
+  const params = { tweet_mode: 'extended', count: 200 };
+  client
+    .get(`statuses/user_timeline`, params)
+    .then(timeline => {
+      res.send(timeline);
+    })
+    .catch(error => res.send(error));
+});
+
+app.get('/api/handlertweets', (req, res) => {
+  const params = { tweet_mode: 'extended', count: 200, q: req.query.q, result_type: 'popular' };
+  client
+    .get(`search/tweets`, params)
+    .then(handlertweets => {
+      res.send(handlertweets);
+    })
+    .catch(error => res.send(error));
 });
 
 let cache = [];

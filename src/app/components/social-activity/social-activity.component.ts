@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SocialactivityService } from '@app/services/socialactivity.service';
+import { Socialactivity } from '@app/models/socialactivity';
 /**
  * Component
  */
@@ -8,16 +10,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./social-activity.component.sass']
 })
 
-/** Comment... */
+/** Comment.... */
 export class SocialActivityComponent implements OnInit {
 
-  public title = "Social Activity Experience";
-  constructor() { }
+  public title = 'Social Activity';
+  private socialActivities: Socialactivity[];
+  constructor(private socialActivityService: SocialactivityService) { }
 
   ngOnInit() {
+    this.socialActivityService.getHandlerSocialActivity('nasa').subscribe(socialActivities => {
+      this.socialActivities = socialActivities;
+    });
   }
 
-  public getTitle(){
+  public getTitle() {
     return this.title;
   }
 
