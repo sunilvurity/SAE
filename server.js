@@ -24,7 +24,7 @@ app.get('/api/user', (req, res) => {
 });
 
 app.get('/api/usertweets', (req, res) => {
-  const params = { tweet_mode: 'extended', count: 200 };
+  const params = { tweet_mode: 'extended', count: 100 };
   client
     .get(`statuses/user_timeline`, params)
     .then(timeline => {
@@ -34,7 +34,7 @@ app.get('/api/usertweets', (req, res) => {
 });
 
 app.get('/api/handlertweets', (req, res) => {
-  const params = { tweet_mode: 'extended', count: 200, q: req.query.q, result_type: 'popular' };
+  const params = { tweet_mode: 'extended', count: 100, q: req.query.q, result_type: 'popular' };
   client
     .get(`search/tweets`, params)
     .then(handlertweets => {
