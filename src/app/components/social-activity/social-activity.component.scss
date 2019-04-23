@@ -43,3 +43,13 @@ mat-cell {
 .mat-column-actions {
   flex: 0 0 300px;
 }
+
+.actions-table {
+  width: 70%;
+  margin-left: 20px;
+  td {
+    max-width: 20%;
+    min-width: 20%;
+    color: #1da1f2 !important;
+  }
+}

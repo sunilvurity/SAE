@@ -8,6 +8,7 @@ import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocialactivityTableComponent } from './components/socialactivity-table/socialactivity-table.component';
 import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 
@@ -25,7 +26,8 @@ import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/mate
     BrowserAnimationsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]

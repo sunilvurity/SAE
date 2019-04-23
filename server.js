@@ -3,7 +3,7 @@ const Twitter = require('twit');
 
 const app = express();
 const client = new Twitter({
-  consumer_key: '',
+ consumer_key: '',
   consumer_secret: '',
   access_token: '',
   access_token_secret: ''

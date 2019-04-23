@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SocialactivityService } from '@app/services/socialactivity.service';
 import { Socialactivity } from '@app/models/socialactivity';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+
 /**
  * Component
  */
