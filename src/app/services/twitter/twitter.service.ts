@@ -15,25 +15,28 @@ export class TwitterService {
     return this.http.get<TwitterResponse>(`${environment.api}/user`);
   }
 
-  home(since?: string) {
-    return this.http.get<TwitterResponse>(
-      `${environment.api}/home?since=${since}`
-    );
+  /**
+   * Gets user friends ( user's following list)
+   * @returns
+   */
+  getUserFriends() {
+    return this.http.get<TwitterResponse>(`${environment.api}/userfriends`);
   }
 
+  /**
+   * Gets user tweets
+   * @param userId
+   * @returns list of user tweets
+   */
   getUserTweets(userId) {
     return this.http.get<TwitterResponse>(
       `${environment.api}/usertweets?userId=${userId}`
     );
   }
 
-  getUserFriends() {
-    return this.http.get<TwitterResponse>(`${environment.api}/userfriends`);
-  }
-
-  getHandlerTweets(twitterHandler: string) {
+  home(since?: string) {
     return this.http.get<TwitterResponse>(
-      `${environment.api}/handlertweets?q=${twitterHandler}`
+      `${environment.api}/home?since=${since}`
     );
   }
 
@@ -41,6 +44,14 @@ export class TwitterService {
     return this.http.post<TwitterResponse>(
       `${environment.api}/${property}/${id}`,
       { state }
+    );
+  }
+
+
+
+  getHandlerTweets(twitterHandler: string) {
+    return this.http.get<TwitterResponse>(
+      `${environment.api}/handlertweets?q=${twitterHandler}`
     );
   }
 }

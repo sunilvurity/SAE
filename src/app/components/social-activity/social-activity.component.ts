@@ -44,6 +44,7 @@ export class SocialActivityComponent implements OnInit {
   constructor(private socialActivityService: SocialactivityService) {}
 
   ngOnInit() {
+    this.setUpDataTable();
     this.socialActivityService.getUserFriends().subscribe(socialTopics => {
       this.socialTopics = socialTopics;
       console.log(this.socialTopics);
@@ -59,12 +60,15 @@ export class SocialActivityComponent implements OnInit {
     this.socialActivityService
       .getUserSocialActivity(selectedTopicId)
       .subscribe(socialActivities => {
-        this.socialActivities = socialActivities;
-        this.socialActivityDataDource = new MatTableDataSource(
-          socialActivities
-        );
-        this.socialActivityDataDource.sort = this.sort;
-        this.socialActivityDataDource.paginator = this.paginator;
+       this.socialActivityDataDource.data = socialActivities;
       });
+  }
+
+  private setUpDataTable() {
+    this.socialActivityDataDource = new MatTableDataSource(
+      this.socialActivities
+    );
+    this.socialActivityDataDource.sort = this.sort;
+    this.socialActivityDataDource.paginator = this.paginator;
   }
 }
