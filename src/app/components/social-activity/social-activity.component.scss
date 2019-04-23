@@ -13,9 +13,12 @@
 }
 
 .data-table {
-  width: 80%;
+  width: 90%;
   margin-left: 20px;
   margin-top: 20px;
+  .topics {
+    display: flex;
+  }
 }
 mat-header-cell {
   display: flex;

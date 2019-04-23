@@ -24,44 +24,53 @@ export class SocialactivityService {
   }
 
   /**
-   * Validate User
+   * get user tweets
    */
-  getUserSocialActivity(): Observable<Socialactivity[]> {
-    this.twitter.getUserTweets().subscribe(user => {
-      console.log(user.data);
-    });
-    return of(null);
+  getUserSocialActivity(userId): Observable<Socialactivity[]> {
+    let socialActivities: Socialactivity[] = [];
+    return this.twitter.getUserTweets(userId).pipe(
+      map(userTweets => {
+        socialActivities = this.getSocialActivitiesFromTweets(
+          userTweets.data
+        );
+        console.log(socialActivities);
+        return socialActivities;
+      })
+    );
   }
 
   /**
-   * Get all social topics
+   * Get all user's following list
    */
-  getSocialTopics(): Observable<SocialTopic[]> {
+  getUserFriends(): Observable<SocialTopic[]> {
     // tslint:disable-next-line: prefer-const
     let socialTopics: SocialTopic[];
 
-    return this.twitter.getHandles().pipe(
+    return this.twitter.getUserFriends().pipe(
       map(handles => {
         console.log(handles.data);
-        socialTopics = this.getSocialTopicsFromHandlers(handles.data);
+        socialTopics = this.getSocialTopicsFromUserFriends(handles.data);
         console.log(socialTopics);
         return socialTopics;
       })
     );
-
   }
 
   /**
    * get a specific social topic responses
    */
-  getHandlerSocialActivity(twitterHanlde: string): Observable<Socialactivity[]> {
+  getHandlerSocialActivity(
+    twitterHanlde: string
+  ): Observable<Socialactivity[]> {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[];
 
     return this.twitter.getHandlerTweets(twitterHanlde).pipe(
       map(handlerTweets => {
         console.log(handlerTweets.data);
-        socialActivities = this.getSocialActivitiesFromTweets(handlerTweets.data);
+        socialActivities = this.getSocialActivitiesFromTweets(
+          handlerTweets.data
+        );
         console.log(socialActivities);
         return socialActivities;
       })
@@ -72,7 +81,7 @@ export class SocialactivityService {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[] = [];
 
-    tweets.statuses.reverse().forEach(tweet => {
+    tweets.reverse().forEach(tweet => {
       const socialActivity: Socialactivity = {
         id: tweet.id_str,
         content: tweet.full_text,
@@ -84,17 +93,23 @@ export class SocialactivityService {
     return socialActivities;
   }
 
-  private getSocialTopicsFromHandlers(handlers: any): SocialTopic[] {
+  private getSocialTopicsFromUserFriends(userFriends: any): SocialTopic[] {
     // tslint:disable-next-line: prefer-const
     let socialTopics: SocialTopic[] = [];
 
-    handlers.topics.forEach(handle => {
-      const socialTopic: SocialTopic = {
-       topic : handle.topic
-      };
-      socialTopics.push(socialTopic);
+    userFriends.users.forEach(userFriend => {
+      if (
+        userFriend.name.includes('Microsoft') ||
+        userFriend.screen_name.includes('Microsoft')
+      ) {
+        const socialTopic: SocialTopic = {
+          id: userFriend.id_str,
+          name: userFriend.name,
+          topic: userFriend.screen_name
+        };
+        socialTopics.push(socialTopic);
+      }
     });
     return socialTopics;
   }
-
 }

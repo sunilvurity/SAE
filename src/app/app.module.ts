@@ -7,16 +7,20 @@ import { SocialActivityComponent } from './components/social-activity/social-act
 import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocialactivityTableComponent } from './components/socialactivity-table/socialactivity-table.component';
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-
-
+import {FormsModule} from '@angular/forms';
+import {
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatSelectModule
+} from '@angular/material';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
     AppComponent,
     SocialActivityComponent,
-    SocialactivityTableComponent,
+    SocialactivityTableComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +31,11 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatSelectModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

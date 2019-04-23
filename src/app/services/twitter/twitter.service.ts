@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Socialactivity } from '@app/models/socialactivity';
-import { TwitterResponse } from '@app/models/twitterresponse';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'environments/environment';
+import { Injectable } from "@angular/core";
+import { Socialactivity } from "@app/models/socialactivity";
+import { TwitterResponse } from "@app/models/twitterresponse";
+import { Observable, of } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "environments/environment";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class TwitterService {
   constructor(private http: HttpClient) {}
@@ -21,12 +21,14 @@ export class TwitterService {
     );
   }
 
-  getUserTweets() {
-    return this.http.get<TwitterResponse>(`${environment.api}/usertweets`);
+  getUserTweets(userId) {
+    return this.http.get<TwitterResponse>(
+      `${environment.api}/usertweets?userId=${userId}`
+    );
   }
 
-  getHandles() {
-    return this.http.get<TwitterResponse>(`${environment.api}/handles`);
+  getUserFriends() {
+    return this.http.get<TwitterResponse>(`${environment.api}/userfriends`);
   }
 
   getHandlerTweets(twitterHandler: string) {
@@ -35,7 +37,7 @@ export class TwitterService {
     );
   }
 
-  action(property: 'favorite' | 'retweet', id: string, state: boolean) {
+  action(property: "favorite" | "retweet", id: string, state: boolean) {
     return this.http.post<TwitterResponse>(
       `${environment.api}/${property}/${id}`,
       { state }
