@@ -5,6 +5,9 @@
     </h4>
   </div>
 </div>
+<div class="topics">
+
+</div>
 <div class="mat-elevation-z8 data-table">
   <mat-table class="full-width-table" [dataSource]="socialActivityDataDource" matSort aria-label="Elements">
 
@@ -29,9 +32,15 @@
       <mat-cell *matCellDef="let row">
         <table class="actions-table">
           <tr>
-            <td><mat-button-toggle>retweet</mat-button-toggle></td>
-            <td><mat-button-toggle>like</mat-button-toggle></td>
-            <td><mat-button-toggle>reply</mat-button-toggle></td>
+            <td>
+              <mat-button-toggle>retweet</mat-button-toggle>
+            </td>
+            <td>
+              <mat-button-toggle>like</mat-button-toggle>
+            </td>
+            <td>
+              <mat-button-toggle>reply</mat-button-toggle>
+            </td>
           </tr>
         </table>
       </mat-cell>

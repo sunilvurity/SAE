@@ -3,10 +3,17 @@ import { TwitterService } from './twitter/twitter.service';
 import { Socialactivity } from '@app/models/socialactivity';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { SocialTopic } from '@app/models/socialtopic';
+/**
+ * Injectable
+ */
 @Injectable({
   providedIn: 'root'
 })
+
+/**
+ *  Social Activity Service
+ */
 export class SocialactivityService {
   user;
   constructor(private twitter: TwitterService) {
@@ -16,6 +23,9 @@ export class SocialactivityService {
     });
   }
 
+  /**
+   * Validate User
+   */
   getUserSocialActivity(): Observable<Socialactivity[]> {
     this.twitter.getUserTweets().subscribe(user => {
       console.log(user.data);
@@ -23,9 +33,28 @@ export class SocialactivityService {
     return of(null);
   }
 
-  getHandlerSocialActivity(
-    twitterHanlde: string
-  ): Observable<Socialactivity[]> {
+  /**
+   * Get all social topics
+   */
+  getSocialTopics(): Observable<SocialTopic[]> {
+    // tslint:disable-next-line: prefer-const
+    let socialTopics: SocialTopic[];
+
+    return this.twitter.getHandles().pipe(
+      map(handles => {
+        console.log(handles.data);
+        socialTopics = this.getSocialTopicsFromHandlers(handles.data);
+        console.log(socialTopics);
+        return socialTopics;
+      })
+    );
+
+  }
+
+  /**
+   * get a specific social topic responses
+   */
+  getHandlerSocialActivity(twitterHanlde: string): Observable<Socialactivity[]> {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[];
 
@@ -37,7 +66,6 @@ export class SocialactivityService {
         return socialActivities;
       })
     );
-
   }
 
   private getSocialActivitiesFromTweets(tweets: any): Socialactivity[] {
@@ -55,4 +83,18 @@ export class SocialactivityService {
     });
     return socialActivities;
   }
+
+  private getSocialTopicsFromHandlers(handlers: any): SocialTopic[] {
+    // tslint:disable-next-line: prefer-const
+    let socialTopics: SocialTopic[] = [];
+
+    handlers.topics.forEach(handle => {
+      const socialTopic: SocialTopic = {
+       topic : handle.topic
+      };
+      socialTopics.push(socialTopic);
+    });
+    return socialTopics;
+  }
+
 }

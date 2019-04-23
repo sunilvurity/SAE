@@ -25,8 +25,14 @@ export class TwitterService {
     return this.http.get<TwitterResponse>(`${environment.api}/usertweets`);
   }
 
+  getHandles() {
+    return this.http.get<TwitterResponse>(`${environment.api}/handles`);
+  }
+
   getHandlerTweets(twitterHandler: string) {
-    return this.http.get<TwitterResponse>(`${environment.api}/handlertweets?q=${twitterHandler}`);
+    return this.http.get<TwitterResponse>(
+      `${environment.api}/handlertweets?q=${twitterHandler}`
+    );
   }
 
   action(property: 'favorite' | 'retweet', id: string, state: boolean) {

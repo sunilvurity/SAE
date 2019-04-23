@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SocialactivityService } from '@app/services/socialactivity.service';
 import { Socialactivity } from '@app/models/socialactivity';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { SocialTopic } from '@app/models/socialtopic';
 
 /**
  * Component
@@ -16,6 +17,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 export class SocialActivityComponent implements OnInit {
   public title = 'Social Activity';
   private socialActivities: Socialactivity[];
+  private socialTopics: SocialTopic[];
   socialActivityDataDource: MatTableDataSource<any>;
   displayedColumns: string[] = ['source', 'content', 'actions'];
   @ViewChild(MatSort) sort: MatSort;
@@ -25,7 +27,7 @@ export class SocialActivityComponent implements OnInit {
 
   ngOnInit() {
     this.socialActivityService
-      .getHandlerSocialActivity('nasa')
+      .getHandlerSocialActivity('Microsoft')
       .subscribe(socialActivities => {
         this.socialActivities = socialActivities;
         this.socialActivityDataDource = new MatTableDataSource(
@@ -34,6 +36,14 @@ export class SocialActivityComponent implements OnInit {
         this.socialActivityDataDource.sort = this.sort;
         this.socialActivityDataDource.paginator = this.paginator;
       });
+
+    // this.socialActivityService
+    //   .getSocialTopics()
+    //   .subscribe(socialTopics => {
+    //     this.socialTopics = socialTopics;
+    //     console.log(this.socialTopics);
+    //   });
+
   }
 
   public getTitle() {
