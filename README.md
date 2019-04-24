@@ -7,9 +7,9 @@ One stop app to get all social activities from one's social platforms and be abl
 # V1 - Current ( In Development )
 
 
-Will intergrate with twitter platform
+Integration twitter platform
 
-Provide capabilites to Like and Retweet and reply
+Provide capabilites to Like and Retweet and reply.
 
 
 
