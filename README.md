@@ -3,6 +3,8 @@
 
 One stop app to get all social activities from one's social platforms and be able to interact with the activities from within the app.
 
+Eliminates swinging between multiple apps to catch up :relaxed: 
+
 
 # V1 - Current ( In Development )
 
