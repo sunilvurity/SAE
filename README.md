@@ -1,6 +1,24 @@
-# MyApp
+# Goal of this App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+
+One stop app to get all social activities from one's social platforms and be able to interact with the activities from within the app.
+
+
+# V1 - Current ( In Development )
+
+
+Will intergrate with twitter platform
+
+Provide capabilites to Like and Retweet and reply
+
+
+
+# V2 - Future
+
+
+Integration with Facebook and Instagram platform.
+
+Mobile app
 
 ## Development server
 
