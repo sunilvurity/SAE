@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import { TwitterService } from "./twitter/twitter.service";
-import { Socialactivity } from "@app/models/socialactivity";
-import { Observable, of } from "rxjs";
-import { map } from "rxjs/operators";
-import { SocialTopic } from "@app/models/socialtopic";
+import { Injectable } from '@angular/core';
+import { TwitterService } from './twitter/twitter.service';
+import { Socialactivity } from '@app/models/socialactivity';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { SocialTopic } from '@app/models/socialtopic';
 /**
  * Injectable
  */
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 
 /**
@@ -98,7 +98,7 @@ export class SocialactivityService {
       const socialActivity: Socialactivity = {
         id: tweet.id_str,
         content: tweet.full_text,
-        source: "Twitter",
+        source: 'Twitter',
         createdOn: new Date(tweet.created_at)
       };
       socialActivities.push(socialActivity);
@@ -112,8 +112,8 @@ export class SocialactivityService {
 
     userFriends.users.forEach(userFriend => {
       if (
-        userFriend.name.includes("Microsoft") ||
-        userFriend.screen_name.includes("Microsoft")
+        userFriend.name.includes('Microsoft') ||
+        userFriend.screen_name.includes('Microsoft')
       ) {
         const socialTopic: SocialTopic = {
           id: userFriend.id_str,
