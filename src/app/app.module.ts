@@ -12,7 +12,8 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatSelectModule
+  MatSelectModule,
+  MatSnackBarModule,
 } from '@angular/material';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
@@ -33,7 +34,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatSortModule,
     MatButtonToggleModule,
     MatSelectModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

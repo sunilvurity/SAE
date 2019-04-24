@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { TwitterService } from './twitter/twitter.service';
-import { Socialactivity } from '@app/models/socialactivity';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { SocialTopic } from '@app/models/socialtopic';
+import { Injectable } from "@angular/core";
+import { TwitterService } from "./twitter/twitter.service";
+import { Socialactivity } from "@app/models/socialactivity";
+import { Observable, of } from "rxjs";
+import { map } from "rxjs/operators";
+import { SocialTopic } from "@app/models/socialtopic";
 /**
  * Injectable
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 
 /**
@@ -30,9 +30,7 @@ export class SocialactivityService {
     let socialActivities: Socialactivity[] = [];
     return this.twitter.getUserTweets(userId).pipe(
       map(userTweets => {
-        socialActivities = this.getSocialActivitiesFromTweets(
-          userTweets.data
-        );
+        socialActivities = this.getSocialActivitiesFromTweets(userTweets.data);
         console.log(socialActivities);
         return socialActivities;
       })
@@ -77,6 +75,21 @@ export class SocialactivityService {
     );
   }
 
+  /**
+   * posts social activity action , like/retweet
+   */
+  postSocialActivityAction(socialActivityId, action): Observable<boolean> {
+    // tslint:disable-next-line: prefer-const
+    let socialActivities: Socialactivity[];
+
+    return this.twitter.postTweetAction(action , socialActivityId, true).pipe(
+      map(handlerTweets => {
+        console.log('action posted');
+        return true;
+      })
+    );
+  }
+
   private getSocialActivitiesFromTweets(tweets: any): Socialactivity[] {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[] = [];
@@ -85,7 +98,7 @@ export class SocialactivityService {
       const socialActivity: Socialactivity = {
         id: tweet.id_str,
         content: tweet.full_text,
-        source: 'Twitter',
+        source: "Twitter",
         createdOn: new Date(tweet.created_at)
       };
       socialActivities.push(socialActivity);
@@ -99,8 +112,8 @@ export class SocialactivityService {
 
     userFriends.users.forEach(userFriend => {
       if (
-        userFriend.name.includes('Microsoft') ||
-        userFriend.screen_name.includes('Microsoft')
+        userFriend.name.includes("Microsoft") ||
+        userFriend.screen_name.includes("Microsoft")
       ) {
         const socialTopic: SocialTopic = {
           id: userFriend.id_str,
