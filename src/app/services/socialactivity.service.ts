@@ -30,9 +30,7 @@ export class SocialactivityService {
     let socialActivities: Socialactivity[] = [];
     return this.twitter.getUserTweets(userId).pipe(
       map(userTweets => {
-        socialActivities = this.getSocialActivitiesFromTweets(
-          userTweets.data
-        );
+        socialActivities = this.getSocialActivitiesFromTweets(userTweets.data);
         console.log(socialActivities);
         return socialActivities;
       })
@@ -73,6 +71,21 @@ export class SocialactivityService {
         );
         console.log(socialActivities);
         return socialActivities;
+      })
+    );
+  }
+
+  /**
+   * posts social activity action , like/retweet
+   */
+  postSocialActivityAction(socialActivityId, action): Observable<boolean> {
+    // tslint:disable-next-line: prefer-const
+    let socialActivities: Socialactivity[];
+
+    return this.twitter.postTweetAction(action , socialActivityId, true).pipe(
+      map(handlerTweets => {
+        console.log('action posted');
+        return true;
       })
     );
   }

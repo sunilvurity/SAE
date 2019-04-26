@@ -1,47 +1,37 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { SocialactivityService } from "@app/services/socialactivity.service";
-import { Socialactivity } from "@app/models/socialactivity";
-import { FormsModule } from "@angular/forms";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SocialactivityService } from '@app/services/socialactivity.service';
+import { Socialactivity } from '@app/models/socialactivity';
+import { FormsModule } from '@angular/forms';
 import {
   MatTableDataSource,
   MatSort,
   MatPaginator,
-  MatSelect
-} from "@angular/material";
-import { SocialTopic } from "@app/models/socialtopic";
+  MatSelect,
+  MatSnackBar,
+} from '@angular/material';
+import { SocialTopic } from '@app/models/socialtopic';
 
 /**
  * Component
  */
 @Component({
-  selector: "app-social-activity",
-  templateUrl: "./social-activity.component.html",
-  styleUrls: ["./social-activity.component.scss"]
+  selector: 'app-social-activity',
+  templateUrl: './social-activity.component.html',
+  styleUrls: ['./social-activity.component.scss']
 })
 
 /** Comment.... */
 export class SocialActivityComponent implements OnInit {
-  public title = "Social Activity";
+  public title = 'Social Activity';
   private socialActivities: Socialactivity[];
-  socialTopics: SocialTopic[] = [
-    {
-      id: "1234",
-      name: "test -1",
-      topic: "test topic - 1"
-    },
-    {
-      id: "5678",
-      name: "test -2",
-      topic: "test topic - 2"
-    }
-  ];
+  socialTopics: SocialTopic[] = [];
   socialActivityDataDource: MatTableDataSource<any>;
-  displayedColumns: string[] = ["id", "source", "content", "actions"];
+  displayedColumns: string[] = ['id', 'source', 'content', 'actions'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   selectedTopic: string;
 
-  constructor(private socialActivityService: SocialactivityService) {}
+  constructor(private socialActivityService: SocialactivityService , private snackBar: MatSnackBar ) {}
 
   ngOnInit() {
     this.setUpDataTable();
@@ -60,7 +50,7 @@ export class SocialActivityComponent implements OnInit {
     this.socialActivityService
       .getUserSocialActivity(selectedTopicId)
       .subscribe(socialActivities => {
-       this.socialActivityDataDource.data = socialActivities;
+        this.socialActivityDataDource.data = socialActivities;
       });
   }
 
@@ -70,5 +60,33 @@ export class SocialActivityComponent implements OnInit {
     );
     this.socialActivityDataDource.sort = this.sort;
     this.socialActivityDataDource.paginator = this.paginator;
+  }
+
+  /******************************************Events************************************************* */
+
+  /**
+   * On Like Click
+   */
+  onLikeClick(selectedRow) {
+    console.log(selectedRow);
+    this.socialActivityService.postSocialActivityAction(selectedRow.id, 'favorite').subscribe(isPosted => {
+      console.log(isPosted);
+      this.snackBar.open('tweet liked!', ' ', {
+        duration: 2000,
+      });
+    });
+  }
+
+  /**
+   * On retweet Click
+   */
+  onRetweetClick(selectedRow) {
+    console.log(selectedRow);
+    this.socialActivityService.postSocialActivityAction(selectedRow.id, 'retweet').subscribe(isPosted => {
+      console.log(isPosted);
+      this.snackBar.open('tweet retweetd!', ' ', {
+        duration: 2000,
+      });
+    });
   }
 }

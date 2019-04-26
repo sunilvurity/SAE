@@ -14,6 +14,7 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MatSelectModule,
+  MatSnackBarModule,
   MatInputModule
 } from '@angular/material';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -37,6 +38,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatButtonToggleModule,
     MatSelectModule,
     FormsModule,
+    MatSnackBarModule,
     MatInputModule
   ],
   providers: [],

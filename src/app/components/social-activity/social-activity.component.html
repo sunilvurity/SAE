@@ -31,7 +31,7 @@
 
       <!-- Content Column -->
       <ng-container matColumnDef="content">
-        <mat-header-cell *matHeaderCellDef mat-sort-header md-truncate>Content</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Content</mat-header-cell>
         <mat-cell *matCellDef="let row">
           {{row.content}}
 
@@ -45,10 +45,10 @@
           <table class="actions-table">
             <tr>
               <td>
-                <mat-button-toggle>retweet</mat-button-toggle>
+                <mat-button-toggle (click)="onLikeClick(row)">like</mat-button-toggle>
               </td>
               <td>
-                <mat-button-toggle>like</mat-button-toggle>
+                <mat-button-toggle (click)="onRetweetClick(row)">retweet</mat-button-toggle>
               </td>
               <td>
                 <mat-button-toggle>reply</mat-button-toggle>
