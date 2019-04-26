@@ -54,4 +54,10 @@ export class TwitterService {
       `${environment.api}/handlertweets?q=${twitterHandler}`
     );
   }
+
+  sendDirectMessage(message: string) {
+    return this.http.post<TwitterResponse>(
+      `${environment.api}/senddirectmessage`, {"message": message}
+    ).subscribe();
+  }
 }

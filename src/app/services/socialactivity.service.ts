@@ -112,4 +112,8 @@ export class SocialactivityService {
     });
     return socialTopics;
   }
+
+  sendDirectMessage(message: string) {
+    this.twitter.sendDirectMessage(message);
+  }
 }
