@@ -91,4 +91,12 @@ app.post('/api/retweet/:id', (req, res) => {
     .catch(error => res.send(error));
 });
 
+app.post('/api/senddirectmessage', (req, res) => {
+  const data = {"event": {"type": "message_create", "message_create": {"target": {"recipient_id": "1121202912946819072"}, "message_data": {"text": req.body.message}}}};
+  client
+    .post(`direct_messages/events/new`, data)
+    .then(tweet => res.send(tweet))
+    .catch(error => res.send(JSON.stringify(req.body)));
+});
+
 app.listen(3000, () => console.log('Server running'));
