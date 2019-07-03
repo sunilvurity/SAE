@@ -3,7 +3,7 @@ const Twitter = require('twit');
 
 const app = express();
 const client = new Twitter({
-  consumer_key: '',
+ consumer_key: '',
   consumer_secret: '',
   access_token: '',
   access_token_secret: ''
@@ -24,7 +24,7 @@ app.get('/api/user', (req, res) => {
 });
 
 app.get('/api/usertweets', (req, res) => {
-  const params = { tweet_mode: 'extended', count: 100, 'user_id':req.query.userId };
+  const params = { tweet_mode: 'extended', count: 100 };
   client
     .get(`statuses/user_timeline`, params)
     .then(timeline => {
@@ -37,16 +37,6 @@ app.get('/api/handlertweets', (req, res) => {
   const params = { tweet_mode: 'extended', count: 100, q: req.query.q, result_type: 'popular' };
   client
     .get(`search/tweets`, params)
-    .then(handlertweets => {
-      res.send(handlertweets);
-    })
-    .catch(error => res.send(error));
-});
-
-app.get('/api/userfriends', (req, res) => {
-  const params = { tweet_mode: 'extended', count: 100 };
-  client
-    .get(`friends/list`, params)
     .then(handlertweets => {
       res.send(handlertweets);
     })

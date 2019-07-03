@@ -6,4 +6,5 @@ export interface Socialactivity {
   source: string;
   content: string;
   createdOn: Date;
+  comments: string[];
 }

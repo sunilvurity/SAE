@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { TwitterService } from './twitter/twitter.service';
+import { FacebookService } from './facebook/facebook.service';
 import { Socialactivity } from '@app/models/socialactivity';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SocialTopic } from '@app/models/socialtopic';
+import { CommentStmt } from '@angular/compiler';
 /**
  * Injectable
  */
@@ -16,113 +18,134 @@ import { SocialTopic } from '@app/models/socialtopic';
  */
 export class SocialactivityService {
   user;
-  constructor(private twitter: TwitterService) {
-    this.twitter.validateUser().subscribe(user => {
+  constructor(private twitter: TwitterService, private facebook: FacebookService) {
+    /*this.twitter.validateUser().subscribe(user => {
       this.user = user.data;
       console.log(this.user);
+    });*/
+  }
+
+  /**
+   * Validate User
+   */
+  getUserSocialActivity(): Observable<Socialactivity[]> {
+    this.twitter.getUserTweets().subscribe(user => {
+      console.log(user.data);
     });
+    return of(null);
   }
 
   /**
-   * get user tweets
+   * Get all social topics
    */
-  getUserSocialActivity(userId): Observable<Socialactivity[]> {
-    let socialActivities: Socialactivity[] = [];
-    return this.twitter.getUserTweets(userId).pipe(
-      map(userTweets => {
-        socialActivities = this.getSocialActivitiesFromTweets(userTweets.data);
-        console.log(socialActivities);
-        return socialActivities;
-      })
-    );
-  }
-
-  /**
-   * Get all user's following list
-   */
-  getUserFriends(): Observable<SocialTopic[]> {
+  getSocialTopics(): Observable<SocialTopic[]> {
     // tslint:disable-next-line: prefer-const
     let socialTopics: SocialTopic[];
 
-    return this.twitter.getUserFriends().pipe(
+    return this.twitter.getHandles().pipe(
       map(handles => {
         console.log(handles.data);
-        socialTopics = this.getSocialTopicsFromUserFriends(handles.data);
+        socialTopics = this.getSocialTopicsFromHandlers(handles.data);
         console.log(socialTopics);
         return socialTopics;
       })
     );
+
   }
 
   /**
    * get a specific social topic responses
    */
-  getHandlerSocialActivity(
-    twitterHanlde: string
-  ): Observable<Socialactivity[]> {
+  getHandlerSocialActivity(twitterHanlde: string): Observable<Socialactivity[]> {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[];
 
     return this.twitter.getHandlerTweets(twitterHanlde).pipe(
       map(handlerTweets => {
         console.log(handlerTweets.data);
-        socialActivities = this.getSocialActivitiesFromTweets(
-          handlerTweets.data
-        );
+        socialActivities = this.getSocialActivitiesFromTweets(handlerTweets.data);
         console.log(socialActivities);
         return socialActivities;
       })
     );
   }
 
-  /**
-   * posts social activity action , like/retweet
-   */
-  postSocialActivityAction(socialActivityId, action): Observable<boolean> {
-    // tslint:disable-next-line: prefer-const
+  getHandlerSocialActivityFB(facebookPage: string): Observable<Socialactivity[]> {
     let socialActivities: Socialactivity[];
 
-    return this.twitter.postTweetAction(action , socialActivityId, true).pipe(
-      map(handlerTweets => {
-        console.log('action posted');
-        return true;
+    return this.facebook.getHandlerPublicPosts(facebookPage).pipe(
+      map(publicPosts => {
+        console.log(publicPosts);
+        socialActivities = this.getSocialActivitiesFromFacebook(publicPosts.data);
+        console.log(socialActivities);
+        //this.getPagePostComments(socialActivities);
+        return socialActivities;
       })
     );
-  }
+  };
 
   private getSocialActivitiesFromTweets(tweets: any): Socialactivity[] {
     // tslint:disable-next-line: prefer-const
     let socialActivities: Socialactivity[] = [];
 
-    tweets.reverse().forEach(tweet => {
+    tweets.statuses.reverse().forEach(tweet => {
       const socialActivity: Socialactivity = {
         id: tweet.id_str,
         content: tweet.full_text,
         source: 'Twitter',
-        createdOn: new Date(tweet.created_at)
+        createdOn: new Date(tweet.created_at),
+        comments: []
       };
       socialActivities.push(socialActivity);
     });
     return socialActivities;
   }
 
-  private getSocialTopicsFromUserFriends(userFriends: any): SocialTopic[] {
+  public getPagePostCommentsFB(postId): Observable<string[]> {
+    return this.facebook.getPagePostComments(postId).pipe(
+        map(comments => {
+          console.log(comments.data);
+          return comments.data;
+        })
+      );
+  }
+
+  public addPagePostCommentsFB(postId: string, content: string): Observable<string> {
+    return this.facebook.addPagePostComment(postId, content).pipe(
+      map(comment => {
+        console.log(comment);
+        return comment.data;
+      })
+    );
+  }
+
+  private getSocialActivitiesFromFacebook(publicPostsFB: any): Socialactivity[] {
+    let soicalActivities: Socialactivity[] = [];
+
+    publicPostsFB.forEach(publicPost => {
+      let socialActivity: Socialactivity = {
+        id: publicPost.id,
+        content: publicPost.message,
+        source: "Facebook",
+        createdOn: new Date(publicPost.created_time),
+        comments: []//this.facebook.getPagePostComments(publicPost.id).pipe()
+      };
+      soicalActivities.push(socialActivity);
+    });
+    return soicalActivities;
+  }
+
+  private getSocialTopicsFromHandlers(handlers: any): SocialTopic[] {
     // tslint:disable-next-line: prefer-const
     let socialTopics: SocialTopic[] = [];
 
-    userFriends.users.forEach(userFriend => {
-      if (
-        userFriend.name.includes('Microsoft') ||
-        userFriend.screen_name.includes('Microsoft')
-      ) {
-        const socialTopic: SocialTopic = {
-          id: userFriend.id_str,
-          name: userFriend.name,
-          topic: userFriend.screen_name
-        };
-        socialTopics.push(socialTopic);
-      }
+    handlers.topics.forEach(handle => {
+      const socialTopic: SocialTopic = {
+       topic : handle.topic
+      };
+      socialTopics.push(socialTopic);
     });
     return socialTopics;
   }
+
 }

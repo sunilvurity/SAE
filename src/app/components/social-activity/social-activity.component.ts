@@ -1,15 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { SocialactivityService } from '@app/services/socialactivity.service';
 import { Socialactivity } from '@app/models/socialactivity';
-import { FormsModule } from '@angular/forms';
-import {
-  MatTableDataSource,
-  MatSort,
-  MatPaginator,
-  MatSelect,
-  MatSnackBar,
-} from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { SocialTopic } from '@app/models/socialtopic';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CommentDialog } from '@app/components/comment-dialog/comment-dialog.component'
 
 /**
  * Component
@@ -24,69 +19,69 @@ import { SocialTopic } from '@app/models/socialtopic';
 export class SocialActivityComponent implements OnInit {
   public title = 'Social Activity';
   private socialActivities: Socialactivity[];
-  socialTopics: SocialTopic[] = [];
+  private socialTopics: SocialTopic[];
   socialActivityDataDource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['id', 'source', 'content', 'actions'];
+  displayedColumns: string[] = ['source', 'content', 'comment','actions'];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  selectedTopic: string;
 
-  constructor(private socialActivityService: SocialactivityService , private snackBar: MatSnackBar ) {}
+  constructor(private socialActivityService: SocialactivityService, public dialog: MatDialog) {}
+
+  content: string = "testcontent";
+  id: string = "testid";
+
+  openDialog(selectedRow): void {
+    const dialogRef = this.dialog.open(CommentDialog, {
+      width: '450px',
+      data: {id: "testid", content: this.content}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.content = result;
+      console.log(this.content);
+      this.socialActivityService.addPagePostCommentsFB(selectedRow.id, this.content).subscribe();
+    });
+  }
 
   ngOnInit() {
-    this.setUpDataTable();
-    this.socialActivityService.getUserFriends().subscribe(socialTopics => {
-      this.socialTopics = socialTopics;
-      console.log(this.socialTopics);
-    });
-  }
-
-  /**
-   * Determines whether topic select on
-   * @param event
-   */
-  onTopicSelect(event) {
-    const selectedTopicId = event.value;
     this.socialActivityService
-      .getUserSocialActivity(selectedTopicId)
+      .getHandlerSocialActivityFB('Microsoft')
       .subscribe(socialActivities => {
-        this.socialActivityDataDource.data = socialActivities;
+        this.socialActivities = socialActivities;
+        this.socialActivityDataDource = new MatTableDataSource(
+          socialActivities
+        );
+        this.socialActivityDataDource.sort = this.sort;
+        this.socialActivityDataDource.paginator = this.paginator;
+        
+        this.socialActivities.forEach( soicalActivity => {
+          this.socialActivityService.getPagePostCommentsFB(soicalActivity.id).subscribe(comments => {
+            console.log("test" + comments.length);
+            soicalActivity.comments = comments;
+          });
+        }
+        
+        );
       });
+
+    // this.socialActivityService
+    //   .getSocialTopics()
+    //   .subscribe(socialTopics => {
+    //     this.socialTopics = socialTopics;
+    //     console.log(this.socialTopics);
+    //   });
+
   }
 
-  private setUpDataTable() {
-    this.socialActivityDataDource = new MatTableDataSource(
-      this.socialActivities
-    );
-    this.socialActivityDataDource.sort = this.sort;
-    this.socialActivityDataDource.paginator = this.paginator;
-  }
-
-  /******************************************Events************************************************* */
-
-  /**
-   * On Like Click
-   */
   onLikeClick(selectedRow) {
     console.log(selectedRow);
-    this.socialActivityService.postSocialActivityAction(selectedRow.id, 'favorite').subscribe(isPosted => {
+    this.socialActivityService.getPagePostCommentsFB(selectedRow.id).subscribe(isPosted => {
       console.log(isPosted);
-      this.snackBar.open('tweet liked!', ' ', {
-        duration: 2000,
-      });
     });
   }
 
-  /**
-   * On retweet Click
-   */
-  onRetweetClick(selectedRow) {
-    console.log(selectedRow);
-    this.socialActivityService.postSocialActivityAction(selectedRow.id, 'retweet').subscribe(isPosted => {
-      console.log(isPosted);
-      this.snackBar.open('tweet retweetd!', ' ', {
-        duration: 2000,
-      });
-    });
+  public getTitle() {
+    return this.title;
   }
 }

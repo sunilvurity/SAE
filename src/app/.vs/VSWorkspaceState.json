@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\components",
+    "\\components\\comment-dialog",
+    "\\components\\social-activity",
+    "\\components\\socialactivity-table",
+    "\\models",
+    "\\services"
+  ],
+  "SelectedNode": "\\components\\social-activity\\social-activity.component.ts",
+  "PreviewInSolutionExplorer": false
+}

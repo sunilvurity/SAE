@@ -7,21 +7,18 @@ import { SocialActivityComponent } from './components/social-activity/social-act
 import { GridModule } from '@progress/kendo-angular-grid';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocialactivityTableComponent } from './components/socialactivity-table/socialactivity-table.component';
-import {FormsModule} from '@angular/forms';
-import {
-  MatTableModule,
-  MatPaginatorModule,
-  MatSortModule,
-  MatSelectModule,
-  MatSnackBarModule,
-} from '@angular/material';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule , MatDialogRef, MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { CommentDialog } from './components/comment-dialog/comment-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     SocialActivityComponent,
-    SocialactivityTableComponent
+    SocialactivityTableComponent,
+    CommentDialog
   ],
   imports: [
     BrowserModule,
@@ -33,11 +30,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatPaginatorModule,
     MatSortModule,
     MatButtonToggleModule,
-    MatSelectModule,
+    MatDialogModule,
+    MatFormFieldModule,
     FormsModule,
-    MatSnackBarModule
+    MatInputModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [CommentDialog]
 })
-export class AppModule {}
+export class AppModule { }
